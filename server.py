@@ -16,8 +16,10 @@ app = Flask(__name__)
 #tokenizer = joblib.load("tokenizer.pkl.bz2")
 #embedding_matrix = joblib.load("embedding_matrix.pkl.bz2")
 print("Loading data files")
-tokenizer = joblib.load(urlopen("https://github.com/IBMDeveloperUK/ML-For-Everyone/blob/master/20200609-Analysing-Tweet-Sentiment-with-Keras/tokenizer.pkl.bz2?raw=true"))
-embedding_matrix = joblib.load(urlopen("https://github.com/IBMDeveloperUK/ML-For-Everyone/blob/master/20200609-Analysing-Tweet-Sentiment-with-Keras/embedding_matrix.pkl.bz2?raw=true"))
+tokenizer_url = os.getenv('TOKENIZER_URL', 'https://github.com/hammertoe/JoyDetector/blob/master/tokenizer.pkl.bz2?raw=true')
+tokenizer = joblib.load(urlopen(tokenizer_url))
+embedding_matrix_url = os.getenv('EMBEDDING_MATRIX_URL', 'https://github.com/hammertoe/JoyDetector/blob/master/embedding_matrix.pkl.bz2?raw=true')
+embedding_matrix = joblib.load(urlopen(embedding_matrix_url))
 print("loaded")
 
 # Load the TFLite model and allocate tensors.
