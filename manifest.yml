@@ -1,0 +1,7 @@
+applications:
+ - name: JoyDetector
+   random-route: true
+   memory: 512M
+   buildpacks:
+   - python_buildpack
+   
