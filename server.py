@@ -13,12 +13,12 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-#tokenizer = joblib.load("tokenizer.pkl.bz2")
-#embedding_matrix = joblib.load("embedding_matrix.pkl.bz2")
 print("Loading data files")
-tokenizer_url = os.getenv('TOKENIZER_URL', 'https://github.com/hammertoe/JoyDetector/blob/master/tokenizer.pkl.bz2?raw=true')
+tokenizer_url = os.getenv('TOKENIZER_URL',
+                          'https://github.com/hammertoe/JoyDetector/blob/master/tokenizer.pkl.bz2?raw=true')
 tokenizer = joblib.load(urlopen(tokenizer_url))
-embedding_matrix_url = os.getenv('EMBEDDING_MATRIX_URL', 'https://github.com/hammertoe/JoyDetector/blob/master/embedding_matrix.pkl.bz2?raw=true')
+embedding_matrix_url = os.getenv('EMBEDDING_MATRIX_URL',
+                                 'https://github.com/hammertoe/JoyDetector/blob/master/embedding_matrix.pkl.bz2?raw=true')
 embedding_matrix = joblib.load(urlopen(embedding_matrix_url))
 print("loaded")
 
@@ -33,9 +33,11 @@ interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
+
 
 @app.route('/tones', methods=['POST'])
 def get_tones():
@@ -57,13 +59,15 @@ def get_tones():
 
             # Get the outputs
             preds = interpreter.get_tensor(output_details[0]['index'])
-            
+
             yield preds[0]
-    
-    res = [ {'text': texts[i], 'joy':round(float(x[0]), 4), 'anger':round(float(x[1]), 4)} for i,x in enumerate(tuple(process())) ]
-    return { 'tones': res }
+
+    res = [{'text': texts[i], 'joy':round(float(x[0]), 4), 'anger':round(float(x[1]), 4)} for i, x in enumerate(tuple(process()))]
+    return {'tones': res}
+
 
 port = int(os.getenv('PORT', 8000))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=False)
