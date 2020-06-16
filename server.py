@@ -13,12 +13,13 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-print("Loading data files")
 tokenizer_url = os.getenv('TOKENIZER_URL',
-                          'https://github.com/hammertoe/JoyDetector/blob/master/tokenizer.pkl.bz2?raw=true')
+                          f'file://{os.getcwd()}/tokenizer.pkl.bz2')
+print("Loading tokenizer from:", tokenizer_url)
 tokenizer = joblib.load(urlopen(tokenizer_url))
 embedding_matrix_url = os.getenv('EMBEDDING_MATRIX_URL',
-                                 'https://github.com/hammertoe/JoyDetector/blob/master/embedding_matrix.pkl.bz2?raw=true')
+                                 f'file://{os.getcwd()}/embedding_matrix.pkl.bz2')
+print("Loading embedding matrix from:", embedding_matrix_url)
 embedding_matrix = joblib.load(urlopen(embedding_matrix_url))
 print("loaded")
 
